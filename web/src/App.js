@@ -23,11 +23,34 @@ function App() {
         return error;
     }
 
-    const onSubmit = ( data ) => {
-        // returns array; take first element of array
-        const word = data.word.match(regexPattern);
+    const onSubmit = async ( data ) => {
+        //const word = data.word.match(regexPattern)[0];
+
+        var word = "soliloquy"
+        var synonyms = ["discourse", "monologue"];
+        var definition = "the act of talking to oneself";
+        //var language = "en";
+        var language = "English";
 
         console.log(word);
+        await fetch("http://localhost:4322/word", {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+                //"Content-Type": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            redirect: "follow", // manual, *follow, error
+            referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify({
+                word: word,
+                synonyms: synonyms,
+                definition: definition,
+                language: language,
+            })
+        });
     };
 
     return (
