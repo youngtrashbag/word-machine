@@ -1,4 +1,5 @@
 import { Formik, Form, Field } from "formik";
+import qs from "qs";
 
 import './App.css';
 
@@ -44,7 +45,7 @@ function App() {
             },
             redirect: "follow", // manual, *follow, error
             referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify({
+            body: qs.stringify({
                 word: word,
                 synonyms: synonyms,
                 definition: definition,
