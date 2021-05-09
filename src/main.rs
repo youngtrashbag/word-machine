@@ -1,4 +1,4 @@
-use actix_web::{App, HttpServer, web, HttpResponse, middleware};
+use actix_web::{App, HttpServer, web, middleware};
 use actix_cors::Cors;
 
 #[macro_use]
@@ -6,6 +6,9 @@ extern crate log;
 
 mod word;
 mod language;
+mod database;
+mod handlers;
+mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -33,6 +36,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .wrap(middleware::DefaultHeaders::new().header("Content-Type", "application/json"))
 
+            .service(web::resource("/word/{word}").route(web::get().to(handlers::get_word)))
+            .service(web::resource("/word").route(web::post().to(handlers::new_word)))
+            .service(web::resource("/word/{word}").route(web::delete().to(handlers::delete_word)))
     })
     .bind(format!("{}:{}", ip_address, port))?
     .run()
