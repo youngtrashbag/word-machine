@@ -8,6 +8,14 @@ edition = "2018"
 
 [dependencies]
 
+# server
+actix-web = "3.3"
+actix-cors = "0.5"
+
+# serialisation
+serde = "1.0"
+bincode = "1.3"
+
 # database
 sled = "0.34"
 
