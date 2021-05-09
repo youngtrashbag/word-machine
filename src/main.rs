@@ -1,4 +1,4 @@
-use actix_web::{App, HttpServer, web, middleware};
+use actix_web::{App, HttpServer, web, middleware, HttpResponse};
 use actix_cors::Cors;
 
 #[macro_use]
@@ -36,8 +36,30 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/word/{word}").route(web::get().to(handlers::get_word)))
             .service(web::resource("/word").route(web::post().to(handlers::new_word)))
             .service(web::resource("/word/{word}").route(web::delete().to(handlers::delete_word)))
+
+            .service(web::resource("/test").route(web::get().to(test)))
     })
     .bind(format!("{}:{}", ip_address, port))?
     .run()
     .await
+}
+
+pub async fn test() -> HttpResponse {
+        let word = word::Word {
+            word: "soliloquy".to_string(),
+            synonyms: Some(vec!["discourse".to_string(), "monologue".to_string()]),
+            definition: "the act of talking to oneself".to_string(),
+            language: language::Language::English,
+        };
+
+        match word::Word::update(word) {
+        Err(e) => {
+            HttpResponse::NotFound()
+                .body(utils::Message::new(&e.to_string()).to_json())
+        },
+        Ok(w) => {
+            HttpResponse::Ok()
+                .body(serde_json::to_string(&w).unwrap())
+        }
+    }
 }

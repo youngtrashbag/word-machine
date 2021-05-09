@@ -7,7 +7,7 @@ pub struct Word {
     /// the word itself
     pub word: String,
     /// list of synonyms (maybe synonyms will have None as this field)
-    pub synonyms: Option<Vec<Word>>,
+    pub synonyms: Option<Vec<String>>,
     /// meaning of the word
     pub definition: String,
     /// the language of the word
