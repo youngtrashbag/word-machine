@@ -61,4 +61,25 @@ impl Word {
             }
         }
     }
+
+    pub fn select_all() -> Result<Vec<Self>, sled::Error> {
+        let db = sled::open(db_path()).unwrap();
+        let mut words: Vec<Word> = Vec::new();
+
+        for w in db.iter() {
+            match w {
+                Err(e) => {
+                    warn!("{}", format!("{}", e));
+                    drop(db);
+
+                    return Err(sled::Error::ReportableBug(e.to_string()));
+                },
+                Ok(w) => {
+                    words.push(Word::byte_deserialize(w.1.to_vec()));
+                }
+            }
+        }
+
+        return Ok(words);
+    }
 }
