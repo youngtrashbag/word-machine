@@ -5,7 +5,7 @@ use crate::language::Language;
 use crate::utils::Message;
 
 pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
-    match Word::get(word) {
+    match Word::select(&word) {
         Err(e) => {
             HttpResponse::NotFound()
                 .body(Message::new(&e.to_string()).to_json())
@@ -18,20 +18,30 @@ pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
 }
 
 pub async fn new_word(new_word: web::Form<Word>) -> HttpResponse {
-    match Word::update(new_word.into_inner()) {
+    let new_word = new_word.into_inner();
+
+    match Word::insert(&new_word) {
         Err(e) => {
             HttpResponse::InternalServerError()
                 .body(Message::new(&e.to_string()).to_json())
         },
-        Ok(w) => {
-            HttpResponse::Ok()
-                .body(serde_json::to_string(&w).unwrap())
+        Ok(_) => {
+            match Word::select(&new_word.word) {
+                Err(e) => {
+                    HttpResponse::InternalServerError()
+                        .body(Message::new(&e.to_string()).to_json())
+                },
+                Ok(w) => {
+                    HttpResponse::Ok()
+                        .body(serde_json::to_string(&w).unwrap())
+                }
+            }
         }
     }
 }
 
 pub async fn delete_word(web::Path(word): web::Path<String>) -> HttpResponse {
-    match Word::delete(word) {
+    match Word::delete(&word) {
         Err(e) => {
             HttpResponse::InternalServerError()
                 .body(Message::new(&e.to_string()).to_json())
@@ -51,7 +61,7 @@ pub async fn test() -> HttpResponse {
             language: Language::English,
         };
 
-        match Word::update(word) {
+        match Word::insert(&word) {
         Err(e) => {
             HttpResponse::NotFound()
                 .body(Message::new(&e.to_string()).to_json())

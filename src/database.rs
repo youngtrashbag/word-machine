@@ -9,8 +9,8 @@ fn db_path() -> String {
 }
 
 impl Word {
-    /// fetch a word from database
-    pub fn get(word: String) -> Result<Self, sled::Error> {
+    /// get/fetch a word from database
+    pub fn select(word: &String) -> Result<Self, sled::Error> {
         let db = sled::open(db_path()).unwrap();
 
         match db.get(word.as_bytes())? {
@@ -28,7 +28,7 @@ impl Word {
     }
 
     /// insert or update word in db
-    pub fn update(word: Word) -> Result<Self, sled::Error> {
+    pub fn insert(word: &Word) -> Result<Self, sled::Error> {
         let db = sled::open(db_path()).unwrap();
 
         match db.insert(word.word.as_bytes(), word.byte_serialize())? {
@@ -45,7 +45,7 @@ impl Word {
         }
     }
 
-    pub fn delete(word: String) -> Result<Self, sled::Error> {
+    pub fn delete(word: &String) -> Result<Self, sled::Error> {
         let db = sled::open(db_path()).unwrap();
 
         match db.remove(word.as_bytes())? {
