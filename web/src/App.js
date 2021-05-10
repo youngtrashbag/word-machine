@@ -1,5 +1,4 @@
 import { Formik, Form, Field } from "formik";
-import qs from "qs";
 
 import './App.css';
 
@@ -40,12 +39,11 @@ function App() {
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             credentials: "same-origin", // include, *same-origin, omit
             headers: {
-                //"Content-Type": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/json",
             },
             redirect: "follow", // manual, *follow, error
             referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: qs.stringify({
+            body: JSON.stringify({
                 word: word,
                 synonyms: synonyms,
                 definition: definition,

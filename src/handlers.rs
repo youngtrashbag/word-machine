@@ -17,7 +17,7 @@ pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
     }
 }
 
-pub async fn new_word(new_word: web::Form<Word>) -> HttpResponse {
+pub async fn new_word(new_word: web::Json<Word>) -> HttpResponse {
     let new_word = new_word.into_inner();
 
     #[allow(unused_must_use)]
