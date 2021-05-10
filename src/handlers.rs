@@ -20,22 +20,16 @@ pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
 pub async fn new_word(new_word: web::Form<Word>) -> HttpResponse {
     let new_word = new_word.into_inner();
 
-    match Word::insert(&new_word) {
+    #[allow(unused_must_use)]
+    Word::insert(&new_word);
+    match Word::select(&new_word.word) {
         Err(e) => {
             HttpResponse::InternalServerError()
                 .body(Message::new(&e.to_string()).to_json())
         },
-        Ok(_) => {
-            match Word::select(&new_word.word) {
-                Err(e) => {
-                    HttpResponse::InternalServerError()
-                        .body(Message::new(&e.to_string()).to_json())
-                },
-                Ok(w) => {
-                    HttpResponse::Ok()
-                        .body(serde_json::to_string(&w).unwrap())
-                }
-            }
+        Ok(w) => {
+            HttpResponse::Ok()
+                .body(serde_json::to_string(&w).unwrap())
         }
     }
 }
