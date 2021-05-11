@@ -6,19 +6,18 @@ edition = "2018"
 license = "MIT"
 
 [[bin]]
-name = "data-layer"
+name = "data"
 description = "REST API, takes requests from frontend, also works with database"
 path = "src/data/main.rs"
 
 [[bin]]
-name = "information-fetching"
+name = "fetching"
 description = "REST API, takes requests from data-layer, fetches information from various API's"
 path = "src/fetching/main.rs"
 
 [lib]
 name = "lib"
 path = "src/lib/mod.rs"
-
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
