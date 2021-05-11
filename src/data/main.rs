@@ -21,7 +21,7 @@ async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
 
     let ip_address: String = "127.0.0.1".to_string();
-    let port: String = "4322".to_string();
+    let port: String = std::env::var("PORT_DATA").expect("PORT_DATA in environment file not set");
 
     info!("Server Running on: {}:{}", ip_address, port);
     
