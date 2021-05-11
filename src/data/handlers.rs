@@ -1,3 +1,4 @@
+#[allow(unused_must_use)]
 use actix_web::{HttpResponse, web};
 
 use lib::word::Word;
@@ -5,11 +6,17 @@ use lib::language::Language;
 use lib::Message;
 use lib::reqwest::build_client;
 
-use crate::database;
+use crate::database::db_path;
 
+/// word does not yet exist; fetch from other service, save to db, return word (201 created)
+/// word exists, return word
 pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
-    match database::select(&word) {
-        Err(e) => {
+    let db = sled::open(db_path()).unwrap();
+
+    match db.get(word.as_bytes()).unwrap() {
+        None => {
+            //warn!("{}", format!("Could not find Word \"{}\"", word));
+
             let client = build_client();
 
             let req = client.get(
@@ -21,48 +28,75 @@ pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
             .send().unwrap();
 
             let w: Word = serde_json::from_str(&req.text().unwrap()).unwrap();
-            match database::insert(&w) {
+
+            // inserting
+            db.insert(word.as_bytes(), w.byte_serialize());
+            // reding word from db
+            match db.get(word.as_bytes()) {
                 Err(e) => {
-                    HttpResponse::NotFound()
-                        .body(Message::new(&e.to_string()).to_json())
+                    drop(db);
+                    return HttpResponse::NotFound()
+                        .body(Message::new(&e.to_string()).to_json());
                 },
                 Ok(w) => {
-                    HttpResponse::Created()
-                        .body(serde_json::to_string(&w).unwrap())
+                    drop(db);
+                    let w = Word::byte_deserialize(w.unwrap().to_vec());
+
+                    return HttpResponse::Created()
+                        .body(serde_json::to_string(&w).unwrap());
                 }
             }
         },
-        Ok(w) => {
-            HttpResponse::Ok()
-                .body(serde_json::to_string(&w).unwrap())
+        Some(w) => {
+            drop(db);
+            let w = Word::byte_deserialize(w.to_vec());
+
+            return HttpResponse::Ok()
+                .body(serde_json::to_string(&w).unwrap());
         }
     }
 }
 
 pub async fn new_word(new_word: web::Json<Word>) -> HttpResponse {
+    let db = sled::open(db_path()).unwrap();
     let new_word = new_word.into_inner();
 
-    #[allow(unused_must_use)]
-    database::insert(&new_word);
-    match database::select(&new_word.word) {
-        Err(e) => {
-            HttpResponse::InternalServerError()
-                .body(Message::new(&e.to_string()).to_json())
+    db.insert(new_word.word.as_bytes(), new_word.byte_serialize());
+    match db.get(new_word.word.as_bytes()).unwrap() {
+        None => {
+            let msg = format!("Could not find Word \"{}\"", new_word.word);
+            warn!("{}", msg);
+            drop(db);
+
+            HttpResponse::NotFound()
+                .body(Message::new(&msg).to_json())
         },
-        Ok(w) => {
+        Some(w) => {
+            drop(db);
+            let word = Word::byte_deserialize(w.to_vec());
+
             HttpResponse::Created()
-                .body(serde_json::to_string(&w).unwrap())
+                .body(serde_json::to_string(&word).unwrap())
         }
     }
 }
 
 pub async fn delete_word(web::Path(word): web::Path<String>) -> HttpResponse {
-    match database::delete(&word) {
-        Err(e) => {
+    let db = sled::open(db_path()).unwrap();
+
+    match db.remove(word.as_bytes()).unwrap() {
+        None => {
+            let msg = format!("Could not delete Word \"{}\"", word);
+            warn!("{}", msg);
+            drop(db);
+
             HttpResponse::InternalServerError()
-                .body(Message::new(&e.to_string()).to_json())
+                .body(Message::new(&msg).to_json())
         },
-        Ok(w) => {
+        Some(w) => {
+            drop(db);
+            let w = Word::byte_deserialize(w.to_vec());
+
             HttpResponse::Gone()
                 .body(serde_json::to_string(&w).unwrap())
         }
@@ -70,16 +104,26 @@ pub async fn delete_word(web::Path(word): web::Path<String>) -> HttpResponse {
 }
 
 pub async fn all_words() -> HttpResponse {
-    match database::select_all() {
-        Err(e) => {
-            HttpResponse::InternalServerError()
-                .body(Message::new(&e.to_string()).to_json())
-        },
-        Ok(v) => {
-            HttpResponse::Ok()
-                .body(serde_json::to_string(&v).unwrap())
+    let db = sled::open(db_path()).unwrap();
+    let mut words: Vec<Word> = Vec::new();
+
+    for w in db.iter() {
+        match w {
+            Err(e) => {
+                warn!("{}", format!("{}", e));
+                drop(db);
+
+                return HttpResponse::InternalServerError()
+                    .body(Message::new(&e.to_string()).to_json())
+            },
+            Ok(w) => {
+                words.push(Word::byte_deserialize(w.1.to_vec()));
+            }
         }
     }
+
+    HttpResponse::Ok()
+        .body(serde_json::to_string(&words).unwrap())
 }
 
 pub async fn test() -> HttpResponse {
@@ -90,14 +134,6 @@ pub async fn test() -> HttpResponse {
         language: Language::English,
     };
 
-    match database::insert(&word) {
-        Err(e) => {
-            HttpResponse::NotFound()
-                .body(Message::new(&e.to_string()).to_json())
-        },
-        Ok(w) => {
-            HttpResponse::Ok()
-                .body(serde_json::to_string(&w).unwrap())
-        }
-    }
+    HttpResponse::Ok()
+        .body(serde_json::to_string(&word).unwrap())
 }

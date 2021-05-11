@@ -30,9 +30,10 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .wrap(middleware::DefaultHeaders::new().header("Content-Type", "application/json"))
 
-            .service(web::resource("/word/{word}").route(web::get().to(handlers::get_word)))
+            .service(web::resource("/word/{word}")
+                .route(web::get().to(handlers::get_word))
+                .route(web::delete().to(handlers::delete_word)))
             .service(web::resource("/word").route(web::post().to(handlers::new_word)))
-            .service(web::resource("/word/{word}").route(web::delete().to(handlers::delete_word)))
             .service(web::resource("/all_words").route(web::get().to(handlers::all_words)))
 
             .service(web::resource("/test").route(web::get().to(handlers::test)))
