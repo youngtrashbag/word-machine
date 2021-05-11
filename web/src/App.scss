@@ -1,5 +1,4 @@
 @import "theme";
-@use "sass:map";
 
 .App {
     text-align: center;
@@ -23,8 +22,8 @@
     width: 100%;
 
     max-height: 250px;
-    min-height: 100px;
-    margin-bottom: -100px;
+    min-height: $header-min-height;
+    margin-bottom: -$header-min-height;
 
     background-color: #DDDDEE;
 

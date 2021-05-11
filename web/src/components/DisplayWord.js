@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+import "../Word.scss";
+
 const DisplayWord = () => {
     const { word } = useParams();
     // setting as false because it serves double purpose as "hasLoaded"
     const [ getWord, setWord ] = useState(false);
-
-    var resWord;
 
     useEffect(async () => {
         const response = await fetch(`http://localhost:4322/word/en/${word}`, {
@@ -25,8 +25,22 @@ const DisplayWord = () => {
         return (<h1>Loading...</h1>);
     }
 
-    return (<h1>{ getWord.definition }</h1>);
+    return (
+        <>
+        <div className="WordContainer">
+            <h1>{ getWord.word }</h1>
+            <p>{ getWord.definition }</p>
+            <div className="SynonymContainer">
+                <ul>
+                {
+                    getWord.synonyms.map( s => <li>{ s }</li>)
+                }
+                </ul>
 
+            </div>
+        </div>
+        </>
+    );
 }
 
 export default DisplayWord;
