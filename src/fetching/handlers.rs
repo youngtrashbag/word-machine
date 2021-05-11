@@ -1,5 +1,4 @@
 use actix_web::{HttpResponse, web};
-use reqwest::blocking::{get, Client};
 
 use lib::reqwest::build_client;
 use crate::parse::parse;

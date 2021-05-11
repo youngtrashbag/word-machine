@@ -3,13 +3,34 @@ use actix_web::{HttpResponse, web};
 use lib::word::Word;
 use lib::language::Language;
 use lib::Message;
+use lib::reqwest::build_client;
+
 use crate::database;
 
 pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
     match database::select(&word) {
         Err(e) => {
-            HttpResponse::NotFound()
-                .body(Message::new(&e.to_string()).to_json())
+            let client = build_client();
+
+            let req = client.get(
+                format!("http://localhost:{}/{}",
+                    std::env::var("PORT_FETCHING").expect("PORT_FETCHING in environment file not set"),
+                    word
+                )
+            )
+            .send().unwrap();
+
+            let w: Word = serde_json::from_str(&req.text().unwrap()).unwrap();
+            match database::insert(&w) {
+                Err(e) => {
+                    HttpResponse::NotFound()
+                        .body(Message::new(&e.to_string()).to_json())
+                },
+                Ok(w) => {
+                    HttpResponse::Created()
+                        .body(serde_json::to_string(&w).unwrap())
+                }
+            }
         },
         Ok(w) => {
             HttpResponse::Ok()

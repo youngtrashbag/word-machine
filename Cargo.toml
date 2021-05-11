@@ -7,12 +7,12 @@ license = "MIT"
 
 [[bin]]
 name = "data"
-description = "REST API, takes requests from frontend, also works with database"
+# description = "REST API, takes requests from frontend, also works with database"
 path = "src/data/main.rs"
 
 [[bin]]
 name = "fetching"
-description = "REST API, takes requests from data-layer, fetches information from various API's"
+# description = "REST API, takes requests from data-layer, fetches information from various API's"
 path = "src/fetching/main.rs"
 
 [lib]
