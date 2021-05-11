@@ -10,8 +10,12 @@ use crate::database::db_path;
 
 /// word does not yet exist; fetch from other service, save to db, return word (201 created)
 /// word exists, return word
-pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
+pub async fn get_word(web::Path((language, word)): web::Path<(String, String)>) -> HttpResponse {
     let db = sled::open(db_path()).unwrap();
+
+    // parsing language for security
+    let lang = Language::from_string(&language).unwrap();
+    let db = db.open_tree(lang.to_string().as_bytes()).unwrap();
 
     match db.get(word.as_bytes()).unwrap() {
         None => {
@@ -57,9 +61,12 @@ pub async fn get_word(web::Path(word): web::Path<String>) -> HttpResponse {
     }
 }
 
-pub async fn new_word(new_word: web::Json<Word>) -> HttpResponse {
+pub async fn new_word(web::Path(language): web::Path<String>, new_word: web::Json<Word>) -> HttpResponse {
     let db = sled::open(db_path()).unwrap();
     let new_word = new_word.into_inner();
+
+    let lang = Language::from_string(&language).unwrap();
+    let db = db.open_tree(lang.to_string().as_bytes()).unwrap();
 
     db.insert(new_word.word.as_bytes(), new_word.byte_serialize());
     match db.get(new_word.word.as_bytes()).unwrap() {
@@ -81,8 +88,11 @@ pub async fn new_word(new_word: web::Json<Word>) -> HttpResponse {
     }
 }
 
-pub async fn delete_word(web::Path(word): web::Path<String>) -> HttpResponse {
+pub async fn delete_word(web::Path((language, word)): web::Path<(String, String)>) -> HttpResponse {
     let db = sled::open(db_path()).unwrap();
+
+    let lang = Language::from_string(&language).unwrap();
+    let db = db.open_tree(lang.to_string().as_bytes()).unwrap();
 
     match db.remove(word.as_bytes()).unwrap() {
         None => {
@@ -103,8 +113,12 @@ pub async fn delete_word(web::Path(word): web::Path<String>) -> HttpResponse {
     }
 }
 
-pub async fn all_words() -> HttpResponse {
+pub async fn all_words(web::Path(language): web::Path<String>) -> HttpResponse {
     let db = sled::open(db_path()).unwrap();
+
+    let lang = Language::from_string(&language).unwrap();
+    let db = db.open_tree(lang.to_string().as_bytes()).unwrap();
+
     let mut words: Vec<Word> = Vec::new();
 
     for w in db.iter() {
