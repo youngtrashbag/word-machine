@@ -29,7 +29,7 @@ pub async fn new_word(new_word: web::Json<Word>) -> HttpResponse {
                 .body(Message::new(&e.to_string()).to_json())
         },
         Ok(w) => {
-            HttpResponse::Ok()
+            HttpResponse::Created()
                 .body(serde_json::to_string(&w).unwrap())
         }
     }
@@ -42,7 +42,7 @@ pub async fn delete_word(web::Path(word): web::Path<String>) -> HttpResponse {
                 .body(Message::new(&e.to_string()).to_json())
         },
         Ok(w) => {
-            HttpResponse::Ok()
+            HttpResponse::Gone()
                 .body(serde_json::to_string(&w).unwrap())
         }
     }
