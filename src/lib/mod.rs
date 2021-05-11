@@ -1,3 +1,7 @@
+pub mod word;
+pub mod language;
+pub mod reqwest;
+
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize,Deserialize)]
