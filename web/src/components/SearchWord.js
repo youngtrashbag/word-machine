@@ -1,11 +1,12 @@
 import { Formik, Form, Field } from "formik";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import "../App.scss";
 
 const SearchWord = () => {
     // only a single word
     const regexPattern = /^([a-z])\w{2,20}[^ ]*/;
+    const history = useHistory();
 
     const initialValues = {
         word: ""
@@ -27,8 +28,7 @@ const SearchWord = () => {
         const word = data.word.match(regexPattern)[0];
 
         //redirect
-        const url = `/word/${word}`;
-        return (<Redirect to={ url } />)
+        history.push(`/word/${word}`);
     };
 
     return (
