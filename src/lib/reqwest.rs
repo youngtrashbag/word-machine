@@ -2,7 +2,7 @@ use reqwest::blocking::{get, Client};
 use reqwest::{redirect::Policy, Proxy};
 use std::time::Duration;
 
-fn build_client() -> Client {
+pub fn build_client() -> Client {
     Client::builder()
         .timeout(Duration::from_secs(10))
         .redirect(Policy::none())

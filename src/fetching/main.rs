@@ -3,7 +3,6 @@ use actix_web::{App, HttpServer, web, middleware};
 #[macro_use]
 extern crate log;
 
-mod client;
 mod handlers;
 
 #[actix_web::main]
