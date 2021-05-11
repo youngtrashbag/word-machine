@@ -4,11 +4,8 @@ use actix_cors::Cors;
 #[macro_use]
 extern crate log;
 
-mod word;
-mod language;
 mod database;
 mod handlers;
-mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -16,7 +13,7 @@ async fn main() -> std::io::Result<()> {
         Err(_) => {
             std::env::set_var("RUST_LOG", "info");
         },
-        Ok(_) => {()}
+        Ok(_) => ()
     };
 
     env_logger::init();
