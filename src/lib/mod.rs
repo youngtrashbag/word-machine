@@ -1,3 +1,6 @@
+pub mod word;
+pub mod language;
+
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize,Deserialize)]
