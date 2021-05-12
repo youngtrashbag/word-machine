@@ -5,8 +5,9 @@ import {
     Link
 } from "react-router-dom";
 
-import SearchWord from "./components/SearchWord";
-import DisplayWord from "./components/DisplayWord";
+import SearchView from "./SearchView";
+import WordView from "./WordView";
+import WordListView from "./WordListView";
 
 import './App.scss';
 
@@ -18,7 +19,7 @@ function App() {
         <div className="Header">
             <ul>
                 <div>
-                    <Link to="/">Home</Link>
+                    <Link to="/">Search</Link>
                 </div>
                 <div>
                     <Link to="/all">List of Words</Link>
@@ -28,11 +29,14 @@ function App() {
         <div className="App">
             <div className="Container">
                 <Switch>
+                    <Route path="/all">
+                        <WordListView />
+                    </Route>
                     <Route path="/word/:word">
-                        <DisplayWord />
+                        <WordView />
                     </Route>
                     <Route exact path="/">
-                        <SearchWord />
+                        <SearchView />
                     </Route>
                     <Route path="*">
                         <h1>Not Found</h1>

@@ -1,9 +1,9 @@
 import { Formik, Form, Field } from "formik";
 import { useHistory } from "react-router-dom";
 
-import "../App.scss";
+import "./App.scss";
 
-const SearchWord = () => {
+const SearchView = () => {
     // only a single word
     const regexPattern = /^([a-z])\w{2,20}[^ ]*/;
     const history = useHistory();
@@ -61,4 +61,4 @@ const SearchWord = () => {
     );
 }
 
-export default SearchWord;
+export default SearchView;
