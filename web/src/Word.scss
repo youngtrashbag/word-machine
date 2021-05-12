@@ -7,10 +7,10 @@
     align-content: left;
     text-align: left;
 
-    max-width: 50%;
+    width: 80%;
     max-height: 50%;
-    min-width: 500px;
-    min-height: 300px;
+    min-width: 300px;
+    min-height: 200px;
 
     padding: 20px;
     margin: 10px;
@@ -27,18 +27,19 @@
     align-items: left;
     align-self: center;
 
-    max-width: 90%;
-    max-height: 50%;
-    min-width: 50%;
-    min-height: 50%;
+    width: 80%;
+    max-height: 100px;
 
-    overflow: hidden;
+    padding: 10px;
+
+    overflow: auto;
 
     border-radius: $border-radius;
     background-color: $background-light;
 
 
     ul {
+        align-items: center;
         list-style-type: none;
     }
 }

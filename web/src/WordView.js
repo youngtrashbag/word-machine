@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 
 import Word from "./components/Word";
 
+import "./App.scss";
+
 const WordView = () => {
     const { word } = useParams();
     // setting as false because it serves double purpose as "hasLoaded"
@@ -25,7 +27,13 @@ const WordView = () => {
         return (<h1>Loading...</h1>);
     }
 
-    return Word(getWord);
+    return (
+        <>
+        <div className="Wrapper">
+            { Word(getWord) }
+        </div>
+        </>
+    );
 }
 
 export default WordView;

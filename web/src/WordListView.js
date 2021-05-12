@@ -24,7 +24,6 @@ const WordListView = () => {
         return (<h1>Loading...</h1>);
     }
 
-    console.log(getWords);
     return (
         <>
             <ul>
