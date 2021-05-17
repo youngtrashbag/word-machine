@@ -11,6 +11,7 @@
 
 - [ ] select language for word
 - [ ] select what external api to use
+- [ ] seperate words with multiple meanings (`drone:1`)
 
 ## frontend
 
