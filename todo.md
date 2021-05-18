@@ -3,6 +3,8 @@
 - [x] handle errors, when external api request fails
 - [ ] change language enum from `Deutsch` to `German`, only serde serialize name should be `Deutsch`
 
+- [ ] start whole app with docker-compose
+
 ## data
 
 - [ ] do not always open and close sled db  
