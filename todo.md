@@ -5,7 +5,7 @@
 ## data
 
 - [ ] do not always open and close sled db  
-    possibly use postgresql db
+    possibly use postgresql db for higher concurrency
 
 ## fetching
 

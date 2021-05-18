@@ -43,12 +43,10 @@ pub async fn get_word(web::Path((language, word)): web::Path<(String, String)>) 
             // reding word from db
             match db.get(word.as_bytes()) {
                 Err(e) => {
-                    drop(db);
                     return HttpResponse::NotFound()
                         .body(Message::new(&e.to_string()).to_json());
                 },
                 Ok(w) => {
-                    drop(db);
                     let w = Word::byte_deserialize(w.unwrap().to_vec());
 
                     return HttpResponse::Created()
@@ -57,7 +55,6 @@ pub async fn get_word(web::Path((language, word)): web::Path<(String, String)>) 
             }
         },
         Some(w) => {
-            drop(db);
             let w = Word::byte_deserialize(w.to_vec());
 
             return HttpResponse::Ok()
@@ -78,13 +75,11 @@ pub async fn new_word(web::Path(language): web::Path<String>, new_word: web::Jso
         None => {
             let msg = format!("Could not find Word {}", new_word.word);
             warn!("{}", msg);
-            drop(db);
 
             HttpResponse::NotFound()
                 .body(Message::new(&msg).to_json())
         },
         Some(w) => {
-            drop(db);
             let word = Word::byte_deserialize(w.to_vec());
 
             HttpResponse::Created()
@@ -103,13 +98,11 @@ pub async fn delete_word(web::Path((language, word)): web::Path<(String, String)
         None => {
             let msg = format!("Could not delete Word {}", word);
             warn!("{}", msg);
-            drop(db);
 
             HttpResponse::InternalServerError()
                 .body(Message::new(&msg).to_json())
         },
         Some(w) => {
-            drop(db);
             let w = Word::byte_deserialize(w.to_vec());
 
             HttpResponse::Gone()
@@ -130,7 +123,6 @@ pub async fn all_words(web::Path(language): web::Path<String>) -> HttpResponse {
         match w {
             Err(e) => {
                 warn!("{}", format!("{}", e));
-                drop(db);
 
                 return HttpResponse::InternalServerError()
                     .body(Message::new(&e.to_string()).to_json())
