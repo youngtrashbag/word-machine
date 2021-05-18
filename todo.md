@@ -19,3 +19,4 @@
 - [x] display all words
 - [ ] create color scheme
 - [ ] better styling
+- [ ] change the selected language to the one in session storage

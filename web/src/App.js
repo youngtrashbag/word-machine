@@ -4,6 +4,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import { useEffect } from "react";
 
 import SearchView from "./SearchView";
 import WordView from "./WordView";
@@ -20,10 +21,24 @@ function changeLanguage(event) {
 }
 
 function App() {
-    const lang = sessionStorage.getItem("language");
-    if (lang == null || lang == undefined) {
-        window.sessionStorage.setItem("language", "en");
-    }
+    useEffect(() => {
+        const lang = sessionStorage.getItem("language");
+        if (lang == null || lang == undefined) {
+            window.sessionStorage.setItem("language", "en");
+        }
+
+        /*
+        // change the selected language to the one in session storage
+        const changeLangElement = document.getElementById("changeLanguage");
+        switch (sessionStorage.getItem("language")) {
+            case("de"):
+                changeLangElement.selected = 
+        }
+        */
+
+
+
+    }, []);
 
     return (
         <>
@@ -40,7 +55,7 @@ function App() {
             <div className="LanguageSelection">
                 <p>Language:</p>
                 &nbsp;
-                <select onChange={changeLanguage}>
+                <select id="changeLanguage" onChange={changeLanguage}>
                     <option value="en">English</option>
                     <option value="de">Deutsch</option>
                 </select>
