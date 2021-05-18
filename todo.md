@@ -1,6 +1,7 @@
 # todo
 
 - [x] handle errors, when external api request fails
+- [ ] change language enum from `Deutsch` to `German`, only serde serialize name should be `Deutsch`
 
 ## data
 
@@ -9,7 +10,7 @@
 
 ## fetching
 
-- [ ] select language for word
+- [x] select language for word
 - [ ] select what external api to use
 - [ ] seperate words with multiple meanings (`drone:1`)
 

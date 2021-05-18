@@ -24,8 +24,9 @@ pub async fn get_word(web::Path((language, word)): web::Path<(String, String)>) 
             let client = build_client();
 
             let res = client.get(
-                format!("http://localhost:{}/{}",
+                format!("http://localhost:{}/{}/{}",
                     std::env::var("PORT_FETCHING").expect("PORT_FETCHING in environment file not set"),
+                    lang.to_string(),
                     word
                 )
             )

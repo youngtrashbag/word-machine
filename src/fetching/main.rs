@@ -4,6 +4,7 @@ use actix_web::{App, HttpServer, web, middleware};
 extern crate log;
 
 mod handlers;
+mod fetching;
 mod parse;
 
 #[actix_web::main]
@@ -28,7 +29,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(middleware::DefaultHeaders::new().header("Content-Type", "application/json"))
 
-            .service(web::resource("/{word}").route(web::get().to(handlers::all_info)))
+            .service(web::resource("/{language}/{word}").route(web::get().to(handlers::all_info)))
             //.service(web::resource("/{word}/definition").route(web::get().to(handlers::definition)))
             //.service(web::resource("/{word}/synonyms").route(web::get().to(handlers::definition)))
     })
