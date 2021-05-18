@@ -8,7 +8,7 @@ const WordListView = () => {
     const [ getWords, setWords ] = useState(false);
 
     useEffect(async () => {
-        const response = await fetch("http://localhost:4322/all_words/en", {
+        const response = await fetch(`http://localhost:4322/all_words/${window.sessionStorage.getItem("language")}`, {
             method: "GET", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

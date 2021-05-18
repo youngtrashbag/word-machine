@@ -11,7 +11,19 @@ import WordListView from "./WordListView";
 
 import './App.scss';
 
+function changeLanguage(event) {
+    if (event.target.value == "de") {
+        window.sessionStorage.setItem("language", "de");
+    } else {
+        window.sessionStorage.setItem("language", "en");
+    }
+}
+
 function App() {
+    const lang = sessionStorage.getItem("language");
+    if (lang == null || lang == undefined) {
+        window.sessionStorage.setItem("language", "en");
+    }
 
     return (
         <>
@@ -25,6 +37,14 @@ function App() {
                     <Link to="/all">List of Words</Link>
                 </div>
             </ul>
+            <div className="LanguageSelection">
+                <p>Language:</p>
+                &nbsp;
+                <select onChange={changeLanguage}>
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
         </div>
         <div className="App">
             <div className="Container">

@@ -5,7 +5,6 @@ use lib::language::Language;
 use crate::fetching::{*};
 use crate::parse::{*};
 
-
 pub async fn all_info(web::Path((language, word)): web::Path<(String, String)>) -> HttpResponse {
     let lang = match Language::from_string(&language) {
         None => {
@@ -16,6 +15,7 @@ pub async fn all_info(web::Path((language, word)): web::Path<(String, String)>) 
     };
 
     let res = fetch(&lang, &word);
+
     match parse(&lang, res.text().unwrap()) {
         None => {
             HttpResponse::NotFound()

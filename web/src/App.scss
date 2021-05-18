@@ -36,6 +36,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: space-between;
 
     ul {
         display: flex;
@@ -51,6 +52,23 @@
                 text-decoration: none;
                 color: black;
             }
+        }
+    }
+
+    .LanguageSelection {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        float: right;
+
+        margin: 20px;
+
+        p {
+            color: #8f8f8f;
+            margin: 2px;
+        }
+
+        select {
         }
     }
 }

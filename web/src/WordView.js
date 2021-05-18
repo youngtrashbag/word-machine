@@ -11,7 +11,7 @@ const WordView = () => {
     const [ getWord, setWord ] = useState(false);
 
     useEffect(async () => {
-        const response = await fetch(`http://localhost:4322/word/en/${word}`, {
+        const response = await fetch(`http://localhost:4322/word/${window.sessionStorage.getItem("language")}/${word}`, {
             method: "GET", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
