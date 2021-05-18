@@ -8,13 +8,19 @@ const Word = (word) => {
         <div className="WordContainer">
             <h1><Link to={ `/word/${word.word}` }>{ word.word }</Link></h1>
             <p>{ word.definition }</p>
-            <div className="SynonymContainer">
-                <ul>
-                {
-                    word.synonyms.map( s => <li><a href={ `/word/${s}` }>{ s }</a></li>)
+            { () => {
+                if (!(word.synonyms == null || word.synonyms == undefined)) {
+                    return (
+                        <div className="SynonymContainer">
+                            <ul>
+                            {
+                                word.synonyms.map( s => <li><a href={ `/word/${s}` }>{ s }</a></li>)
+                            }
+                            </ul>
+                        </div>
+                    )
                 }
-                </ul>
-            </div>
+            }}
         </div>
         </>
     );
