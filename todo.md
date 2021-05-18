@@ -1,6 +1,6 @@
 # todo
 
-- [ ] handle errors, when external api request fails
+- [x] handle errors, when external api request fails
 
 ## data
 

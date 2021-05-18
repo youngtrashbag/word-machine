@@ -19,11 +19,11 @@ pub async fn get_word(web::Path((language, word)): web::Path<(String, String)>) 
 
     match db.get(word.as_bytes()).unwrap() {
         None => {
-            //warn!("{}", format!("Could not find Word \"{}\"", word));
+            //warn!("{}", format!("Could not find Word {}", word));
 
             let client = build_client();
 
-            let req = client.get(
+            let res = client.get(
                 format!("http://localhost:{}/{}",
                     std::env::var("PORT_FETCHING").expect("PORT_FETCHING in environment file not set"),
                     word
@@ -31,7 +31,12 @@ pub async fn get_word(web::Path((language, word)): web::Path<(String, String)>) 
             )
             .send().unwrap();
 
-            let w: Word = serde_json::from_str(&req.text().unwrap()).unwrap();
+            if res.status().is_client_error() {
+                return HttpResponse::NotFound()
+                    .body(res.text().unwrap());
+            }
+
+            let w: Word = serde_json::from_str(&res.text().unwrap()).unwrap();
 
             // inserting
             db.insert(word.as_bytes(), w.byte_serialize());
@@ -71,7 +76,7 @@ pub async fn new_word(web::Path(language): web::Path<String>, new_word: web::Jso
     db.insert(new_word.word.as_bytes(), new_word.byte_serialize());
     match db.get(new_word.word.as_bytes()).unwrap() {
         None => {
-            let msg = format!("Could not find Word \"{}\"", new_word.word);
+            let msg = format!("Could not find Word {}", new_word.word);
             warn!("{}", msg);
             drop(db);
 
@@ -96,7 +101,7 @@ pub async fn delete_word(web::Path((language, word)): web::Path<(String, String)
 
     match db.remove(word.as_bytes()).unwrap() {
         None => {
-            let msg = format!("Could not delete Word \"{}\"", word);
+            let msg = format!("Could not delete Word {}", word);
             warn!("{}", msg);
             drop(db);
 
