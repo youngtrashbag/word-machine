@@ -30,7 +30,7 @@ const WordView = () => {
     return (
         <>
         <div className="Wrapper">
-            { Word(getWord) }
+            <Word word={ getWord } />
         </div>
         </>
     );

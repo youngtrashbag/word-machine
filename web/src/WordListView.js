@@ -31,7 +31,7 @@ const WordListView = () => {
                 getWords.map( function(w) {
                     return (
                         <>
-                        { Word(w) }
+                        <Word word={ w } />
                         <br/>
                         </>
                     )

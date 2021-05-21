@@ -2,25 +2,33 @@ import { Link } from "react-router-dom";
 
 import "../Word.scss";
 
-const Word = (word) => {
+const Synonyms = (props) => {
+    const { synonyms } = props;
+
+    if (synonyms.length > 1) {
+        return (
+            <div className="SynonymContainer">
+                <ul>
+                {
+                    synonyms.map( s => <li><a href={ `/word/${s}` }>{ s }</a></li>)
+                }
+                </ul>
+            </div>
+        )
+    } else {
+        return null;
+    }
+}
+
+const Word = (props) => {
+    const { word } = props;
+
     return (
         <>
         <div className="WordContainer">
             <h1><Link to={ `/word/${word.word}` }>{ word.word }</Link></h1>
             <p>{ word.definition }</p>
-            { () => {
-                if (!(word.synonyms == null || word.synonyms == undefined)) {
-                    return (
-                        <div className="SynonymContainer">
-                            <ul>
-                            {
-                                word.synonyms.map( s => <li><a href={ `/word/${s}` }>{ s }</a></li>)
-                            }
-                            </ul>
-                        </div>
-                    )
-                }
-            }}
+            <Synonyms synonyms={word.synonyms} />
         </div>
         </>
     );
