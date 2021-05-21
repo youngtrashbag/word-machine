@@ -13,7 +13,7 @@ import WordListView from "./WordListView";
 import './App.scss';
 
 function changeLanguage(event) {
-    if (event.target.value == "de") {
+    if (event.target.value === "de") {
         window.sessionStorage.setItem("language", "de");
     } else {
         window.sessionStorage.setItem("language", "en");
@@ -23,18 +23,23 @@ function changeLanguage(event) {
 function App() {
     useEffect(() => {
         const lang = sessionStorage.getItem("language");
-        if (lang == null || lang == undefined) {
+        if (lang === null || lang === undefined) {
             window.sessionStorage.setItem("language", "en");
         }
 
-        /*
         // change the selected language to the one in session storage
         const changeLangElement = document.getElementById("changeLanguage");
+        console.log(changeLangElement)
+
         switch (sessionStorage.getItem("language")) {
             case("de"):
-                changeLangElement.selected = 
+                console.log(changeLangElement.selected)
+                break;
+            // english language should be selected by default
+            default:
+                console.log("en");
+                break;
         }
-        */
 
 
 
