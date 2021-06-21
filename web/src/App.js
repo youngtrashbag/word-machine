@@ -1,10 +1,10 @@
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route,
     Link
 } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import SearchView from "./SearchView";
 import WordView from "./WordView";
@@ -12,33 +12,32 @@ import WordListView from "./WordListView";
 
 import './App.scss';
 
-function changeLanguage(event) {
-    if (event.target.value == "de") {
-        window.sessionStorage.setItem("language", "de");
-    } else {
-        window.sessionStorage.setItem("language", "en");
-    }
-}
 
 function App() {
-    useEffect(() => {
-        const lang = sessionStorage.getItem("language");
-        if (lang == null || lang == undefined) {
-            window.sessionStorage.setItem("language", "en");
-        }
+    const [language, setLanguage] = useState("en");
 
-        /*
+    useEffect(() => {
         // change the selected language to the one in session storage
         const changeLangElement = document.getElementById("changeLanguage");
-        switch (sessionStorage.getItem("language")) {
+
+        switch (language) {
             case("de"):
-                changeLangElement.selected = 
+                changeLangElement.options[1].selected = true;
+                break;
+            // english language should be selected by default
+            default:
+                changeLangElement.options[0].selected = true;
+                break;
         }
-        */
+    }, [language]);
 
-
-
-    }, []);
+    function changeLanguage(event) {
+        if (event.target.value === "de") {
+            setLanguage("de");
+        } else {
+            setLanguage("en");
+        }
+    }
 
     return (
         <>
@@ -65,10 +64,10 @@ function App() {
             <div className="Container">
                 <Switch>
                     <Route path="/all">
-                        <WordListView />
+                        <WordListView language={language} />
                     </Route>
                     <Route path="/word/:word">
-                        <WordView />
+                        <WordView language={language} />
                     </Route>
                     <Route exact path="/">
                         <SearchView />

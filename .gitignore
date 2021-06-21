@@ -2,3 +2,5 @@
 
 .env
 sled_db
+
+/resources
