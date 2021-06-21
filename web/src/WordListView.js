@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import Word from "./components/Word";
 import "./Word.scss";
 
-const WordListView = () => {
+const WordListView = (props) => {
+    const { language } = props;
     // setting as false because it serves double purpose as "hasLoaded"
-    const [ getWords, setWords ] = useState(false);
+    const [ response, setResponse ] = useState(false);
 
     useEffect(() => {
         async function fetchWords() {
-            const response = await fetch(`http://localhost:4322/all_words/${window.sessionStorage.getItem("language")}`, {
+            const response = await fetch(`http://localhost:4322/all_words/${language}`, {
                 method: "GET", // *GET, POST, PUT, DELETE, etc.
                 mode: "cors", // no-cors, *cors, same-origin
                 cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -18,21 +19,22 @@ const WordListView = () => {
                 referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
             });
 
-            return await response.json();
+            return await response;
         }
 
-        setWords(fetchWords());
+        setResponse(fetchWords());
     }, []);
 
-    if (!getWords) {
+    if (!response) {
         return (<h1>Loading...</h1>);
     }
 
-    return (
-        <>
-            <ul>
-            {
-                getWords.map( function(w) {
+    if (response.ok) {
+        return (
+            <>
+                <ul>
+                {
+                response.json().map( function(w) {
                     return (
                         <>
                         <Word word={ w } />
@@ -40,10 +42,19 @@ const WordListView = () => {
                         </>
                     )
                 })
-            }
-            </ul>
-        </>
-    );
+                }
+                </ul>
+            </>
+        );
+    } else {
+        return (
+            <>
+            <div className="Error">
+                <p>Could not fetch words</p>
+            </div>
+            </>
+        );
+    }
 }
 
 export default WordListView;
