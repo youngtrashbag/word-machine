@@ -4,6 +4,8 @@ Translate and automatically save Words in both English and German.
 
 This App was built with Microservice Architecture in mind. It uses Sled-Db, which is an embedded database.
 
+![homepage](./docs/img/homepage.png)
+
 ## Features
 
 - Support both English and German.
