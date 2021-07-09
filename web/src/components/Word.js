@@ -10,7 +10,7 @@ const Synonyms = (props) => {
             <div className="SynonymContainer">
                 <ul>
                 {
-                    synonyms.map( s => <li><a href={ `/word/${s}` }>{ s }</a></li>)
+                    synonyms.map( s => <li><Link to={ `/word/${s}` }>{ s }</Link></li>)
                 }
                 </ul>
             </div>
