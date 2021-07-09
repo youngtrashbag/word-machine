@@ -66,9 +66,10 @@ function App() {
                     <Route path="/all">
                         <WordListView language={language} />
                     </Route>
-                    <Route path="/word/:word">
-                        <WordView language={language} />
-                    </Route>
+                    <Route
+                        path="/word/:word"
+                        children={<WordView language={language} />}
+                    />
                     <Route exact path="/">
                         <SearchView />
                     </Route>

@@ -16,6 +16,9 @@ This App was built with Microservice Architecture in mind. It uses Sled-Db, whic
 
 ## Setup and Install
 
+1. `cp .env.examples .env`
+   create environment file and set variables in file
+
 ### Backend
 
 1. `cargo build`
@@ -24,6 +27,8 @@ This App was built with Microservice Architecture in mind. It uses Sled-Db, whic
 
 ### Frontend
 
+1. `ln .env web/.env `
+   create link of .env file for react env variables
 1. `cd web`
 2. `npm install`
 3. `npm run start`

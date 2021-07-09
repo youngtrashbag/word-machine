@@ -21,7 +21,7 @@ async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
 
     let ip_address: String = "127.0.0.1".to_string();
-    let port: String = std::env::var("PORT_FETCHING").expect("PORT_FETCHING in environment file not set");
+    let port: String = std::env::var("REACT_APP_PORT_FETCHING").expect("REACT_APP_PORT_FETCHING in environment file not set");
 
     info!("Server Running on: {}:{}", ip_address, port);
     
