@@ -5,6 +5,7 @@ Translate and automatically save Words in both English and German.
 This App was built with Microservice Architecture in mind. It uses Sled-Db, which is an embedded database.
 
 ![homepage](./docs/img/homepage.png)
+![single word](./docs/img/single-word-en.png)
 
 ## Features
 
@@ -34,3 +35,8 @@ This App was built with Microservice Architecture in mind. It uses Sled-Db, whic
 3. `npm run start`
 
 Now visit `http://localhost:3000` in your preferred browser, and you're good to go.
+
+## More Screenshots
+
+![single word de](./docs/img/single-word-de.png)
+![word list en](./docs/img/word-list-en.png)
