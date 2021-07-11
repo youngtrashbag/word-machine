@@ -31,7 +31,7 @@ This App was built with Microservice Architecture in mind. It uses Sled-Db, whic
 1. `ln .env web/.env `  
    create link of .env file for react env variables
 1. `cd web`
-2. `npm install`
+2. `npm install .`
 3. `npm run start`
 
 Now visit `http://localhost:3000` in your preferred browser, and you're good to go.
