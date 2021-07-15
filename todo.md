@@ -9,6 +9,7 @@
 
 - [ ] do not always open and close sled db  
     possibly use postgresql db for higher concurrency
+    or use [deadpool](https://github.com/bikeshedder/deadpool)
 
 ## fetching
 
